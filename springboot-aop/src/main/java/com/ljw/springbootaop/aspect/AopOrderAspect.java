@@ -19,7 +19,7 @@ public class AopOrderAspect {
     long beginTime;
 
     /**
-     * 配置织入点
+     * 配置切入点
      */
     @Pointcut("@annotation(com.ljw.springbootaop.aspect.annotation.AopOrder)")
     public void Pointcut() {

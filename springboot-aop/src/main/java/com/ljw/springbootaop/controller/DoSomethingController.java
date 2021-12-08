@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class DoSomethingController {
 
-
+    //连接点：getXxx方法调用时触发切入点配置的规则
     @Log(module = "查询操作", actionType = ActionType.QUERY, operatorType = OperatorType.MANAGE, saveParameter = false)
     @GetMapping
     public String getXxx(@RequestParam String param) {

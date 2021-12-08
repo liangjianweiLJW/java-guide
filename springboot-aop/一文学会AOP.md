@@ -3,7 +3,7 @@ theme: qklhk-chocolate
 highlight: atom-one-dark
 ---
 # 本章源码下载
-[本章源码下载已分享github](url)
+[本章源码已分享github](https://github.com/liangjianweiLJW/java-guide/tree/master/springboot-aop)
 # AOP是什么
 
 - AOP又叫`面向切面编程`，旨在通过允许横切关注点的分离，提高`模块化`。通俗理解就是，将那些与业务无关，却为业务模块所共同调用的逻辑代码封装起来，形成一个切面，使原来的业务功能更加强大，即`增强`，并`减少重复代码`，`降低`模块间的`耦合度`，方便后期操作和维护
@@ -370,7 +370,7 @@ public class LogAspect {
 - 程序执行过程中明确的点，如`方法的调用`或特定的异常被抛出。连接点由两个信息确定：
     -   方法(表示程序执行点，即在哪个目标方法)
     -   相对点(表示方位，即目标方法的什么位置，比如调用前，后等)
-- 简单来说`，连接点就是被拦截到的程序执行点`，因为Spring aop`只支持方法类型的连接点`，所以在Spring中连接点就是被拦截到的方法。
+- 简单来说，`连接点就是被拦截到的程序执行点`，因为Spring aop`只支持方法类型的连接点`，所以在Spring中连接点就是被拦截到的方法。
 ```java
 @Before("pointcut()")
 public void log(JoinPoint joinPoint) { //这个JoinPoint参数就是连接点
@@ -454,6 +454,7 @@ public class LogAdvisor extends AbstractPointcutAdvisor {
 -  @Around  ：环绕增强，相当于MethodInterceptor
 
 # AOP执行顺序
+
 执行成功:
 ```mermaid
 graph LR
@@ -476,7 +477,7 @@ AfterThrowing --> After
 # AOP实战：日志收集
 ## 需求分析
 - 日志使用注解，降低业务代码侵入性
-- 日志可以分类分模块
+- 日志可以分模块
 - 日志可以记录不同的操作行为
 - 日志可以记录操作的ip
 - 日志需要持久化到数据库
@@ -521,6 +522,7 @@ public @interface Log {
  * @Author: jianweil
  * @date: 2021/12/6 14:39
  */
+ //切面
 @Aspect
 @Component
 public class LogAspect {
@@ -531,16 +533,16 @@ public class LogAspect {
     private static final Logger log = LoggerFactory.getLogger(LogAspect.class);
 
     /**
-     * 配置织入点
+     * 配置切入点
      */
     @Pointcut("@annotation(com.ljw.springbootaop.aspect.annotation.Log)")
     public void logPointCut() {
     }
 
     /**
-     * 处理完请求后执行
+     * 通知：处理完请求后执行
      *
-     * @param joinPoint 切点
+     * @param joinPoint 连接点
      */
     @AfterReturning(pointcut = "logPointCut()", returning = "jsonResult")
     public void doAfterReturning(JoinPoint joinPoint, Object jsonResult) {
@@ -548,9 +550,9 @@ public class LogAspect {
     }
 
     /**
-     * 拦截异常操作
+     * 通知：拦截异常操作
      *
-     * @param joinPoint 切点
+     * @param joinPoint 连接点
      * @param e         异常
      */
     @AfterThrowing(value = "logPointCut()", throwing = "e")
@@ -730,7 +732,7 @@ public class LogAspect {
 @Slf4j
 public class DoSomethingController {
 
-
+      //连接点：getXxx方法调用时触发切入点配置的规则
     @Log(module = "查询操作", actionType = ActionType.QUERY, operatorType = OperatorType.MANAGE, saveParameter = false)
     @GetMapping
     public String getXxx(@RequestParam String param) {

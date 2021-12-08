@@ -36,6 +36,7 @@ import java.util.Random;
  * @Author: jianweil
  * @date: 2021/12/6 14:39
  */
+//切面
 @Aspect
 @Component
 public class LogAspect {
@@ -46,14 +47,14 @@ public class LogAspect {
     private static final Logger log = LoggerFactory.getLogger(LogAspect.class);
 
     /**
-     * 配置织入点
+     * 配置切入点
      */
     @Pointcut("@annotation(com.ljw.springbootaop.aspect.annotation.Log)")
     public void logPointCut() {
     }
 
     /**
-     * 处理完请求后执行
+     * 通知：处理完请求后执行
      *
      * @param joinPoint 切点
      */
@@ -63,7 +64,7 @@ public class LogAspect {
     }
 
     /**
-     * 拦截异常操作
+     * 通知：拦截异常操作
      *
      * @param joinPoint 切点
      * @param e         异常
