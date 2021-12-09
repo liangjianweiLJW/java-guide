@@ -27,6 +27,8 @@
 
     <modules>
         <module>springboot-aop</module>
+        <module>springboot-bean-lifecycle</module>
+        <module>springboot-threadpool</module>
     </modules>
 
     <repositories>
