@@ -29,6 +29,7 @@
         <module>springboot-aop</module>
         <module>springboot-bean-lifecycle</module>
         <module>springboot-threadpool</module>
+        <module>springboot-timer</module>
     </modules>
 
     <repositories>
