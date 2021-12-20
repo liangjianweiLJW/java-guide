@@ -1,6 +1,6 @@
 package com.ljw.springbootbeanlifecycle.lifecycle.config;
 
-import com.ljw.springbootbeanlifecycle.lifecycle.MyService;
+import com.ljw.springbootbeanlifecycle.lifecycle.service.m1.MyService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Description;
@@ -18,7 +18,7 @@ public class BeanInitAndDestroyConfig {
      */
     @Description("测试bean的生命周期")
     @Bean(initMethod = "initMethod", destroyMethod = "destroyMethod")
-    public MyService myDefineBeanName() {//入参数可注入其他依赖
+    public MyService myServiceBeanName() {//入参数可注入其他依赖
         return new MyService();
     }
 }

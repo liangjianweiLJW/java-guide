@@ -1,8 +1,7 @@
-package com.ljw.springbootbeanlifecycle.lifecycle;
+package com.ljw.springbootbeanlifecycle.lifecycle.service.m1;
 
-import com.ljw.springbootbeanlifecycle.lifecycle.service.Animal;
-import com.ljw.springbootbeanlifecycle.lifecycle.service.Person;
-import lombok.extern.slf4j.Slf4j;
+import com.ljw.springbootbeanlifecycle.lifecycle.service.m2.Animal;
+import com.ljw.springbootbeanlifecycle.lifecycle.service.m2.Person;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,6 @@ import javax.annotation.PreDestroy;
  * @Author: jianweil
  * @date: 2021/12/8 9:46
  */
-@Slf4j
 public class MyService implements Person, BeanNameAware, BeanFactoryAware, ApplicationContextAware, InitializingBean, DisposableBean {
 
     private Animal animal = null;
@@ -35,7 +33,7 @@ public class MyService implements Person, BeanNameAware, BeanFactoryAware, Appli
     }
 
     public MyService() {
-        log.info("{}:构造方法",this.getClass().getSimpleName());
+        System.out.println("2. [bean实例化]："+this.getClass().getSimpleName()+"----------构造方法");
     }
     /**
      *接口规定方法：注入依赖
@@ -44,27 +42,27 @@ public class MyService implements Person, BeanNameAware, BeanFactoryAware, Appli
     @Autowired
     @Qualifier("dog")
     public void setAnimal(Animal animal) {
-        log.info("dog----依赖注入");
+        System.out.println("5. [bean属性赋值]：dog----依赖注入");
         this.animal = animal;
     }
 
 
     @Override
     public void setBeanName(String s) {
-        log.info("调用【BeanNameAware】--setBeanName({})", s);
+        System.out.println("6. 调用【BeanNameAware】--setBeanName:"+s);
 
     }
 
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
-        log.info("调用【BeanFactoryAware】--setBeanFactory");
+        System.out.println("7. 调用【BeanFactoryAware】--setBeanFactory");
     }
 
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         this.applicationContext = applicationContext;
-        log.info("调用【ApplicationContextAware】--setApplicationContext");
+        System.out.println("8. 调用【ApplicationContextAware】--setApplicationContext");
 
     }
 
@@ -73,7 +71,7 @@ public class MyService implements Person, BeanNameAware, BeanFactoryAware, Appli
      */
     @PostConstruct
     public void myInit() {
-        log.info("注解@PostConstruct自定义初始化方法[myInit]");
+        System.out.println("10. [初始化] 注解@PostConstruct自定义初始化方法[myInit]");
     }
 
     /**
@@ -81,7 +79,7 @@ public class MyService implements Person, BeanNameAware, BeanFactoryAware, Appli
      */
     @Override
     public void afterPropertiesSet() throws Exception {
-        log.info("调用【InitializingBean】--afterPropertiesSet");
+        System.out.println("11. [初始化] 接口InitializingBean方法[afterPropertiesSet]");
 
     }
 
@@ -89,7 +87,7 @@ public class MyService implements Person, BeanNameAware, BeanFactoryAware, Appli
      * 初始化3
      */
     public void initMethod() {
-        log.info("注解@Bean自定义初始化方法[initMethod]");
+        System.out.println("12. [初始化] 注解@Bean自定义初始化方法[initMethod]");
     }
 
     /**
@@ -97,7 +95,7 @@ public class MyService implements Person, BeanNameAware, BeanFactoryAware, Appli
      */
     @PreDestroy
     public void myDestroy() {
-        log.info("注解@PreDestroy自定义销毁方法[myDestroy]");
+        System.out.println("14. [销毁] 注解@PreDestroy自定义销毁方法[myDestroy]");
     }
 
     /**
@@ -105,13 +103,13 @@ public class MyService implements Person, BeanNameAware, BeanFactoryAware, Appli
      */
     @Override
     public void destroy() throws Exception {
-        log.info("调用【DisposableBean】--destroy");
+        System.out.println("15. [销毁] 接口DisposableBean方法[destroy]");
     }
 
     /**
      * 销毁3
      */
     public void destroyMethod() {
-        log.info("注解@Bean自定义销毁方法[destroyMethod]");
+        System.out.println("16. [销毁] 注解@Bean自定义销毁方法[destroyMethod]");
     }
 }

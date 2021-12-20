@@ -2,7 +2,7 @@
 package com.ljw.springbootbeanlifecycle.ioc;
 
 import com.ljw.springbootbeanlifecycle.lifecycle.config.BeanInitAndDestroyConfig;
-import com.ljw.springbootbeanlifecycle.lifecycle.service.impl.Cat;
+import com.ljw.springbootbeanlifecycle.lifecycle.service.m2.impl.Cat;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;

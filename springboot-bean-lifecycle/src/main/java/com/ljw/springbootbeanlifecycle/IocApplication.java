@@ -2,8 +2,8 @@
 package com.ljw.springbootbeanlifecycle;
 
 import com.ljw.springbootbeanlifecycle.ioc.IocAppConfig;
-import com.ljw.springbootbeanlifecycle.lifecycle.service.impl.Cat;
-import com.ljw.springbootbeanlifecycle.lifecycle.service.impl.Dog;
+import com.ljw.springbootbeanlifecycle.lifecycle.service.m2.impl.Cat;
+import com.ljw.springbootbeanlifecycle.lifecycle.service.m2.impl.Dog;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;

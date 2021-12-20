@@ -1,4 +1,4 @@
-package com.ljw.springbootbeanlifecycle.lifecycle.service;
+package com.ljw.springbootbeanlifecycle.lifecycle.service.m2;
 
 /**
  * @Description: todo
