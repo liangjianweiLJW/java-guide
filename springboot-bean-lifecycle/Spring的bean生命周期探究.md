@@ -4,7 +4,7 @@ highlight: atom-one-dark
 ---
 
 # 源码下载
-[github源码](https://github.com/liangjianweiLJW/java-guide/tree/master/springboot-bean-lifecycle)
+[本章节源码github](https://github.com/liangjianweiLJW/java-guide/tree/master/springboot-bean-lifecycle)
 
 
 # 什么是 Spring Bean 的生命周期
@@ -148,9 +148,9 @@ public interface BeanDefinition extends AttributeAccessor, BeanMetadataElement {
 - 得到持有的beanDefiniation的数目
 - 根据beanName 判断是否包含beanDefiniation
 - 它的默认实现类，主要有三个：
-    - SimpleBeanDefinitionRegistry
-    - DefaultListableBeanFactory
-    - GenericApplicationContext
+  - SimpleBeanDefinitionRegistry
+  - DefaultListableBeanFactory
+  - GenericApplicationContext
 
 
 ```java
@@ -361,9 +361,124 @@ bean注册 --> 实列化
 
 注：其他都是在这阶段前后的扩展点
 
-1. [Spring和Springboot角度查看bean定义和注册](url)
 
-2. AbstractAutowireCapableBeanFactory为AutowireCapableBeanFactory接口的一个实现类，其中AbstractAutowireCapableBeanFactory实现类的一个方法doCreateBean()
+## Spring角度查看bean的定义与注册
+![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e736915fef6b41f0bcf62ac02022902b~tplv-k3u1fbpfcp-watermark.image?)
+
+![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/2f427347f87e4fdcb659e53d8a59ced5~tplv-k3u1fbpfcp-watermark.image?)
+
+refresh()
+```java
+public void refresh() throws BeansException, IllegalStateException {
+    synchronized(this.startupShutdownMonitor) {
+        StartupStep contextRefresh = this.applicationStartup.start("spring.context.refresh");
+         // 准备Bean初始化相关的环境信息，其内部提供了一个空实现的initPropertySources()方法用于提供给用户一个更改相关环境信息的机会
+        this.prepareRefresh();
+        // 创建BeanFactory实例，并且注册相关的bean信息
+        ConfigurableListableBeanFactory beanFactory = this.obtainFreshBeanFactory();
+        // 注册Aware和Processor实例，并且注册了后续处理请求所需的一些Editor信息
+        this.prepareBeanFactory(beanFactory);
+
+        try {
+            // 提供的一个空方法，用于供给子类对已经生成的BeanFactory的一些信息进行定制
+            this.postProcessBeanFactory(beanFactory);
+            StartupStep beanPostProcess = this.applicationStartup.start("spring.context.beans.post-process");
+            // 调用BeanFactoryPostProcessor及其子接口的相关方法，这些接口提供了一个入口，提供给了调用方一个修改已经生成的BeanDefinition的入口
+            this.invokeBeanFactoryPostProcessors(beanFactory);
+            // 对BeanPostProcessor进行注册
+            this.registerBeanPostProcessors(beanFactory);
+            beanPostProcess.end();
+            // 初始化国际化所需的bean信息
+            this.initMessageSource();
+            // 初始化事件广播器的bean信息
+            this.initApplicationEventMulticaster();
+            // 提供的一个空方法，供给子类用于提供自定义的bean信息，或者修改已有的bean信息
+            this.onRefresh();
+            // 注册事件监听器
+            this.registerListeners();
+             // 对已经注册的非延迟（配置文件指定）bean的实例化
+            this.finishBeanFactoryInitialization(beanFactory);
+            // 清除缓存的资源信息，初始化一些声明周期相关的bean，并且发布Context已被初始化的事件
+            this.finishRefresh();
+        } catch (BeansException var10) {
+            if (this.logger.isWarnEnabled()) {
+                this.logger.warn("Exception encountered during context initialization - cancelling refresh attempt: " + var10);
+            }
+             // 发生异常则销毁已经生成的bean
+            this.destroyBeans();
+            // 重置refresh字段信息
+            this.cancelRefresh(var10);
+            throw var10;
+        } finally {
+            // 初始化一些缓存信息
+            this.resetCommonCaches();
+            contextRefresh.end();
+        }
+
+    }
+}
+```
+![image.png](https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/81972757e5db41fa80354b594c51cc2d~tplv-k3u1fbpfcp-watermark.image?)
+
+
+
+![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/176fd2e347764879baf9bdc3854437d1~tplv-k3u1fbpfcp-watermark.image?)
+
+
+![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f2fb8cbc85c740b7ad6936e3c3616ee7~tplv-k3u1fbpfcp-watermark.image?)
+
+
+![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/ec2415ea61644ecb8a04b7fbfc49c0a2~tplv-k3u1fbpfcp-watermark.image?)
+
+
+
+![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6f52a1a2c7d44c90ada21b9b4a7b2af7~tplv-k3u1fbpfcp-watermark.image?)
+
+
+
+![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/4142c8da2c8e4a9e98624164823dd0ee~tplv-k3u1fbpfcp-watermark.image?)
+
+
+![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/a6336dc522a0402a915ba967f1821103~tplv-k3u1fbpfcp-watermark.image?)
+
+## SpringBoot角度查看bean定义和注册
+
+
+![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/f0f18a5dee3b4f008f2bfb825535b82a~tplv-k3u1fbpfcp-watermark.image?)
+
+
+![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e2ca79762e11469681ea3a03a7401af2~tplv-k3u1fbpfcp-watermark.image?)
+
+
+![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e3ae56c899ff476a994b370306c0fd8a~tplv-k3u1fbpfcp-watermark.image?)
+
+
+### 1. 自动加载配置类
+![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/b240918fc6c34933ab1a5a9fa3144087~tplv-k3u1fbpfcp-watermark.image?)
+
+
+![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/690e097343444cee8d955a24275b335e~tplv-k3u1fbpfcp-watermark.image?)
+
+
+![image.png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8d6363622d284ceaa09e6448729d9b3f~tplv-k3u1fbpfcp-watermark.image?)
+
+
+### 2. bean定义和注册
+![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/fd879059bba84683b610add7b598aecb~tplv-k3u1fbpfcp-watermark.image?)
+
+
+![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/6c8c8a61ecc74ce4b9da81786e3b7c69~tplv-k3u1fbpfcp-watermark.image?)
+
+
+![image.png](https://p9-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/d60a097e129647b5ac9762e27af4d1a6~tplv-k3u1fbpfcp-watermark.image?)
+
+
+![image.png](https://p1-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/c8540bb249fd41d88c32d90594f90073~tplv-k3u1fbpfcp-watermark.image?)
+注：springboot只是比spring多了自动配置相关流程，在spring上做了一层逻辑封装。
+
+
+##  实例化，依赖注入，初始化
+AbstractAutowireCapableBeanFactory为AutowireCapableBeanFactory接口的一个实现类，其中AbstractAutowireCapableBeanFactory实现类的一个方法doCreateBean()
 
 
 ```java
@@ -384,7 +499,7 @@ protected Object doCreateBean(String beanName, RootBeanDefinition mbd, @Nullable
     Object exposedObject = bean;
 
     try {
-    	// 属性赋值阶段
+    	// 依赖注入，属性赋值阶段
         this.populateBean(beanName, mbd, instanceWrapper);
         // 初始化阶段
         exposedObject = this.initializeBean(beanName, exposedObject, mbd);
@@ -398,13 +513,13 @@ protected Object doCreateBean(String beanName, RootBeanDefinition mbd, @Nullable
 
 可以发现，分别调用三种方法：
 1. createBeanInstance() -> 实例化
-2. populateBean() -> 属性赋值
+2. populateBean() -> 依赖注入
 3. initializeBean() -> 初始化
 
-而销毁阶段是在容器关闭时调用的，在ConfigurableApplicationContext#close()
+## 销毁
+销毁阶段是在容器关闭时调用的，在ConfigurableApplicationContext#close()
 
-至于xxxAware，BeanPostProcessor，BeanFactoryPostProcessor等类，只不过是对主流程四个步骤的一系列扩展点而已。
-
+至于xxxAware，BeanPostProcessor，BeanFactoryPostProcessor等类，只不过是对主流程的一系列扩展点而已。
 
 # Bean的生命周期的扩展点
 Spring Bean 的生命周期的扩展点很多，这里不可能全部列出来，只说核心的扩展点。这也就是为什么 Spring 的扩展性很好的原因，开了很多的口子，尽可能让某个功能高内聚松耦合，用户需要哪个功能就用哪个，而不是直接来一个大而全的东西。
@@ -433,9 +548,9 @@ Spring Bean 的生命周期的扩展点很多，这里不可能全部列出来�
 - BeanPostProcessor
 - InstantiationAwareBeanPostProcessor（InstantiationAwareBeanPostProcessor 是继承了 BeanPostProcessor）
 - 工厂后处理器接口也是容器级的。在应用上下文装配配置文件之后立即调用：
-    - AspectJWeavingEnabler
-    - ConfigurationClassPostProcessor
-    - CustomAutowireConfigurer
+  - AspectJWeavingEnabler
+  - ConfigurationClassPostProcessor
+  - CustomAutowireConfigurer
 
 
 # 常用接口
@@ -443,9 +558,9 @@ Spring Bean 的生命周期的扩展点很多，这里不可能全部列出来�
 ## InstantiationAwareBeanPostProcessor
 
 - 该类是 BeanPostProcessor 的子接口，常用的有如下三个方法：
-    - postProcessBeforeInstantiation(Class beanClass, String beanName)：在bean实例化之前调用
-    - postProcessProperties(PropertyValues pvs, Object bean, String beanName)：在bean实例化之后、设置属性前调用
-    - postProcessAfterInstantiation(Class beanClass, String beanName)：在bean实例化之后调用
+  - postProcessBeforeInstantiation(Class beanClass, String beanName)：在bean实例化之前调用
+  - postProcessProperties(PropertyValues pvs, Object bean, String beanName)：在bean实例化之后、设置属性前调用
+  - postProcessAfterInstantiation(Class beanClass, String beanName)：在bean实例化之后调用
 
 ## BeanNameAware
 - BeanNameAware接口是为了让自身Bean能够感知到，只有一个方法setBeanName(String name)，**获取到自身在Spring容器中的id或name属性。**
@@ -781,7 +896,7 @@ Process finished with exit code 0
 
 ```
 
-# Bean 生命周期图
+# Bean生命周期图
 ![bean生命周期 (2).png](https://p6-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/8257f6c07df74b6a839163da91d893c1~tplv-k3u1fbpfcp-watermark.image?)
 
 
