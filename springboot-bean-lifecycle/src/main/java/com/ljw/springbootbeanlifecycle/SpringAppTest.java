@@ -11,7 +11,6 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  */
 public class SpringAppTest {
     public static void main(String[] args) {
-
         // 完整的加载过程，当然了解的越多越好
         AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(IocAppConfig.class);
         MyService myService = (MyService) applicationContext.getBean("myServiceBeanName");
