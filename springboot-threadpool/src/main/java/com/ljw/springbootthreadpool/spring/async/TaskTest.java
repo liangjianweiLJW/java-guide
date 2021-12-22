@@ -6,6 +6,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
+import java.util.concurrent.Future;
 
 /**
  * @Description: todo
@@ -20,6 +21,10 @@ public class TaskTest implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        log.info("异步获取返回值");
+        Future<String> result = service2.getResult();
+        String s = result.get();
+        log.info(s);
         log.info("开始做任务一");
         service2.service2Executor();
         log.info("开始做任务二");

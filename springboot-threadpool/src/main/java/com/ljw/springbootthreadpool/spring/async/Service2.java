@@ -2,9 +2,11 @@ package com.ljw.springbootthreadpool.spring.async;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 
 import java.util.Random;
+import java.util.concurrent.Future;
 
 /**
  * @Description: todo
@@ -41,6 +43,17 @@ public class Service2 {
         long end = System.currentTimeMillis();
         int i = 1 / 0;
         log.info("使用默认线程池，耗时：" + (end - start) + "毫秒");
+    }
+
+    /**
+     * 如果有返回值，返回类型应该为 Future<>
+     *
+     * @return
+     */
+    @Async
+    public Future<String> getResult() throws InterruptedException {
+        Thread.sleep(3 * 1000);
+        return new AsyncResult<>("haha");
     }
 
 }
