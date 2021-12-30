@@ -30,6 +30,9 @@
         <module>springboot-bean-lifecycle</module>
         <module>springboot-threadpool</module>
         <module>springboot-timer</module>
+        <module>springboot-work</module>
+        <module>ljw-spring-boot-starter</module>
+        <module>ljw-test-spring-boot-starter</module>
     </modules>
 
     <repositories>

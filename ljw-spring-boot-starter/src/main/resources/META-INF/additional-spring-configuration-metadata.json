@@ -1,0 +1,18 @@
+{"properties": [
+    {
+      "name": "ljw.config.name",
+      "type": "java.lang.String",
+      "defaultValue": "hello 默认值！这里配置的是提示，真正默认值在Properties里面",
+      "description": "这是字符串名称啊."
+    },
+    {
+      "name": "ljw.config.age",
+      "defaultValue": 8,
+      "description": "这是int类型的年龄啊.",
+      "deprecation": {
+              "reason": "过时原因.",
+              "replacement": "替代key是：ljw.config.age22",
+              "level": "warning"
+            }
+    }
+]}
