@@ -1,0 +1,7 @@
+spring:
+  banner:
+    image:
+#      location: classpath:myBanner/banner1.gif
+      location: classpath:myBanner/fireworks.gif
+server:
+  port: 9090

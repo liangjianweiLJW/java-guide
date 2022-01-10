@@ -34,6 +34,7 @@
         <module>ljw-spring-boot-starter</module>
         <module>ljw-test-spring-boot-starter</module>
         <module>enbalexxx-spring-boot</module>
+        <module>banner-spring-boot</module>
     </modules>
 
     <repositories>
