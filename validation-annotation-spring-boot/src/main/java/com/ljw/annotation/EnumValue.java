@@ -27,7 +27,8 @@ public @interface EnumValue {
     Class<? extends Payload>[] payload() default {};
 
     /**
-     * 是否必须传
+     * true 必传
+     * false 非必传
      *
      * @return
      */
@@ -38,6 +39,6 @@ public @interface EnumValue {
      *
      * @return
      */
-    Class<? extends Enum> value() default Enum.class;
+    Class<? extends Enum> value();
 
 }

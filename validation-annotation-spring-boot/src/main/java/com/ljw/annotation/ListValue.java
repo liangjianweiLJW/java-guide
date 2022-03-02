@@ -38,10 +38,8 @@ public @interface ListValue {
     String[] value();
 
     /**
-     * 需要校验数组是否可以为null
-     * true 可以不传 传了就校验
-     * false 不能为null
-     *
+     * true 必传
+     * false 非必传
      * @return
      */
     boolean required() default true;

@@ -30,9 +30,9 @@ public class UserVO {
      * 列举性别枚举值: 1女 2男
      */
     @ListValue(value = {"1", "2"}, message = "性别参数不对", required = false)
-    private String gender;
+    private Integer gender;
 
-    @EnumValue(value = Gender.class, message = "不在系统支持的枚举范围内")
+    @EnumValue(value = Gender.class, message = "不在系统支持的枚举范围内",required = false)
     private Integer genderEnum;
 
     @NotBlank(message = "邮箱不能为空")

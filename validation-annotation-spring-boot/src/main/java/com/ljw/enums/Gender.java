@@ -9,13 +9,15 @@ import com.ljw.base.ValidatorEnumMapper;
  */
 public enum Gender implements ValidatorEnumMapper<Integer> {
 
-    male(0),
-    female(1);
+    male(1, "男"),
+    female(2, "女");
 
     private int value;
+    private String type;
 
-    Gender(int value) {
+    Gender(int value, String type) {
         this.value = value;
+        this.type = type;
     }
 
     @Override

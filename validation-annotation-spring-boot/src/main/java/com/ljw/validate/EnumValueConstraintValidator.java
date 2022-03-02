@@ -1,11 +1,14 @@
 package com.ljw.validate;
 
 import com.ljw.annotation.EnumValue;
+import com.ljw.base.ValidatorEnumMapper;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.lang.reflect.Method;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @Description: todo
@@ -14,8 +17,9 @@ import java.util.Objects;
  */
 public class EnumValueConstraintValidator implements ConstraintValidator<EnumValue, Object> {
 
+    private Set<Object> values = new HashSet<>();
     private Class<? extends Enum> enumClass;
-    private static final String METHOD_NAME = "getValue";
+    boolean required = true;
 
     /**
      * 这个方法做一些初始化校验
@@ -27,9 +31,17 @@ public class EnumValueConstraintValidator implements ConstraintValidator<EnumVal
         enumClass = constraintAnnotation.value();
         try {
             // 先判断该enum是否实现了getValue方法
-            enumClass.getDeclaredMethod(METHOD_NAME);
+            enumClass.getDeclaredMethod(ValidatorEnumMapper.METHOD_NAME);
+            for (Enum e : enumClass.getEnumConstants()) {
+                Method declaredMethod = e.getClass().getDeclaredMethod(ValidatorEnumMapper.METHOD_NAME);
+                Object obj = declaredMethod.invoke(e);
+                values.add(obj);
+            }
+            required = constraintAnnotation.required();
         } catch (NoSuchMethodException e) {
             throw new IllegalArgumentException("the enum class has not getValue method", e);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
@@ -42,26 +54,34 @@ public class EnumValueConstraintValidator implements ConstraintValidator<EnumVal
      */
     @Override
     public boolean isValid(Object value, ConstraintValidatorContext constraintValidatorContext) {
-        // 如果为空返回 true , 判空用 @NotNull 等专用注解
-        if (Objects.isNull(value)) {
-            return true;
-        }
-        try {
-            Enum[] enumConstants = enumClass.getEnumConstants();
-            if (enumConstants == null) {
-                // 如果不是枚举类型，返回 enumConstants = null
+        if (required) {
+            if (Objects.isNull(value)) {
+                return false;
+            }
+            return isPass(value);
+
+        } else {
+            //value可以为null
+            if (Objects.isNull(value)) {
                 return true;
             }
-            for (Enum e : enumConstants) {
-                Method declaredMethod = e.getClass().getDeclaredMethod(METHOD_NAME);
-                Object obj = declaredMethod.invoke(e);
-                if (Objects.equals(obj, value)) {
-                    return true;
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
+            return isPass(value);
         }
-        return false;
+    }
+
+    /**
+     * value不为null时检验是否匹配
+     *
+     * @param value
+     * @return
+     */
+    private boolean isPass(Object value) {
+        //不为null
+        Enum[] enumConstants = enumClass.getEnumConstants();
+        if (enumConstants == null) {
+            // 如果不是枚举类型，返回 enumConstants = null
+            return true;
+        }
+        return values.contains(value);
     }
 }

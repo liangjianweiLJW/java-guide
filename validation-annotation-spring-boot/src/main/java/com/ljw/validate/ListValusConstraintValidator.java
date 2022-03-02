@@ -45,14 +45,14 @@ public class ListValusConstraintValidator implements ConstraintValidator<ListVal
                 //value为null
                 return false;
             }
-            return valus.contains(value);
+            return valus.contains(value.toString());
         } else {
             //value可以为null
             if (value == null) {
                 return true;
             } else {
                 //如果value不为null，校验是否是列举的值
-                return valus.contains(value);
+                return valus.contains(value.toString());
             }
         }
     }
