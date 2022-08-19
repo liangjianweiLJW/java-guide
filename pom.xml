@@ -36,6 +36,8 @@
         <module>enbalexxx-spring-boot</module>
         <module>banner-spring-boot</module>
         <module>validation-annotation-spring-boot</module>
+        <module>itext-pdf-spring-boot</module>
+        <module>camunda-spring-boot</module>
     </modules>
 
     <repositories>
