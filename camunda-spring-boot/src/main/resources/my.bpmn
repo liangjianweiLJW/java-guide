@@ -3,7 +3,7 @@
   <bpmn:process id="Process_myljw" name="测试ljw" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:extensionElements>
-        <camunda:executionListener delegateExpression="${endProcInstListener}" event="start" />
+        <camunda:executionListener delegateExpression="${startProcInstListener}" event="start" />
       </bpmn:extensionElements>
       <bpmn:outgoing>Flow_0s0y5e1</bpmn:outgoing>
       <bpmn:outgoing>Flow_0sw5xaf</bpmn:outgoing>
@@ -40,7 +40,7 @@
     </bpmn:sequenceFlow>
     <bpmn:endEvent id="Event_10x4rwq">
       <bpmn:extensionElements>
-        <camunda:executionListener delegateExpression="${startProcInstListener}" event="end" />
+        <camunda:executionListener delegateExpression="${endProcInstListener}" event="end" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1xd12o6</bpmn:incoming>
       <bpmn:incoming>Flow_0ocuaj2</bpmn:incoming>
