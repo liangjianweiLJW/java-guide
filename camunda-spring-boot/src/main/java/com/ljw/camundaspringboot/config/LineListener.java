@@ -40,6 +40,7 @@ public class LineListener implements ExecutionListener {
                 System.out.println("line流程结束:{}" + execution.getProcessInstanceId());
                 break;
             default:
+                System.out.println("line take:{}" + execution.getProcessInstanceId());
                 break;
         }
 

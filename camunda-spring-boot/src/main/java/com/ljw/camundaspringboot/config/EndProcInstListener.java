@@ -29,6 +29,7 @@ public class EndProcInstListener implements ExecutionListener {
 
     @Override
     public void notify(DelegateExecution execution) throws Exception {
+        System.out.println("结束");
         String eventName = execution.getEventName();
         switch (eventName) {
             case EVENTNAME_START:
@@ -38,6 +39,7 @@ public class EndProcInstListener implements ExecutionListener {
                 System.out.println("流程结束:{}" + execution.getProcessInstanceId());
                 break;
             default:
+                System.out.println("流程 take结束:{}" + execution.getProcessInstanceId());
                 break;
         }
 
