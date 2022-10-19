@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0cwb6xz" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.2.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
+  <bpmn:process id="Process_1926mdj" name="测试ljw" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${endProcInstListener}" event="start" />
+      </bpmn:extensionElements>
+      <bpmn:outgoing>Flow_0s0y5e1</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0sw5xaf</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0wso1iz</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0s0y5e1" sourceRef="StartEvent_1" targetRef="Activity_19v3x3r">
+      <bpmn:documentation>11111</bpmn:documentation>
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${lineListener}" event="take">
+          <camunda:field name="my1">
+            <camunda:string>ljw</camunda:string>
+          </camunda:field>
+        </camunda:executionListener>
+        <camunda:properties>
+          <camunda:property name="myname1" value="myvalue" />
+        </camunda:properties>
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0sw5xaf" sourceRef="StartEvent_1" targetRef="Activity_0pxai3y">
+      <bpmn:documentation>3333</bpmn:documentation>
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${lineListener}" event="take" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0wso1iz" sourceRef="StartEvent_1" targetRef="Activity_0u1oax0">
+      <bpmn:documentation>2222</bpmn:documentation>
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${lineListener}" event="take" />
+      </bpmn:extensionElements>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_10x4rwq">
+      <bpmn:extensionElements>
+        <camunda:executionListener delegateExpression="${startProcInstListener}" event="end" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1xd12o6</bpmn:incoming>
+      <bpmn:incoming>Flow_0ocuaj2</bpmn:incoming>
+      <bpmn:incoming>Flow_0c50evo</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1xd12o6" sourceRef="Activity_0u1oax0" targetRef="Event_10x4rwq" />
+    <bpmn:sequenceFlow id="Flow_0ocuaj2" sourceRef="Activity_19v3x3r" targetRef="Event_10x4rwq" />
+    <bpmn:sequenceFlow id="Flow_0c50evo" sourceRef="Activity_0pxai3y" targetRef="Event_10x4rwq" />
+    <bpmn:userTask id="Activity_0u1oax0">
+      <bpmn:documentation>bbbb</bpmn:documentation>
+      <bpmn:extensionElements>
+        <camunda:taskListener delegateExpression="${startUserTaskListener}" event="create" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0wso1iz</bpmn:incoming>
+      <bpmn:outgoing>Flow_1xd12o6</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_0pxai3y">
+      <bpmn:documentation>cccc</bpmn:documentation>
+      <bpmn:extensionElements>
+        <camunda:taskListener delegateExpression="${startUserTaskListener}" event="create" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0sw5xaf</bpmn:incoming>
+      <bpmn:outgoing>Flow_0c50evo</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:userTask id="Activity_19v3x3r">
+      <bpmn:documentation>aaa</bpmn:documentation>
+      <bpmn:extensionElements>
+        <camunda:taskListener delegateExpression="${startUserTaskListener}" event="create" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0s0y5e1</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ocuaj2</bpmn:outgoing>
+    </bpmn:userTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1926mdj">
+      <bpmndi:BPMNEdge id="Flow_0c50evo_di" bpmnElement="Flow_0c50evo">
+        <di:waypoint x="440" y="360" />
+        <di:waypoint x="516" y="360" />
+        <di:waypoint x="516" y="200" />
+        <di:waypoint x="592" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ocuaj2_di" bpmnElement="Flow_0ocuaj2">
+        <di:waypoint x="450" y="80" />
+        <di:waypoint x="521" y="80" />
+        <di:waypoint x="521" y="200" />
+        <di:waypoint x="592" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xd12o6_di" bpmnElement="Flow_1xd12o6">
+        <di:waypoint x="440" y="200" />
+        <di:waypoint x="592" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0wso1iz_di" bpmnElement="Flow_0wso1iz">
+        <di:waypoint x="188" y="200" />
+        <di:waypoint x="340" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0sw5xaf_di" bpmnElement="Flow_0sw5xaf">
+        <di:waypoint x="188" y="200" />
+        <di:waypoint x="240" y="200" />
+        <di:waypoint x="240" y="360" />
+        <di:waypoint x="340" y="360" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0s0y5e1_di" bpmnElement="Flow_0s0y5e1">
+        <di:waypoint x="188" y="200" />
+        <di:waypoint x="243" y="200" />
+        <di:waypoint x="243" y="80" />
+        <di:waypoint x="350" y="80" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="152" y="182" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_10x4rwq_di" bpmnElement="Event_10x4rwq">
+        <dc:Bounds x="592" y="182" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1vqsfqc_di" bpmnElement="Activity_0u1oax0">
+        <dc:Bounds x="340" y="160" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_16pk33g_di" bpmnElement="Activity_0pxai3y">
+        <dc:Bounds x="340" y="320" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1cojebm_di" bpmnElement="Activity_19v3x3r">
+        <dc:Bounds x="350" y="40" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
