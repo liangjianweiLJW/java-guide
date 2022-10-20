@@ -42,7 +42,8 @@ public class CamundaSpringBootApplication {
     @EventListener
     public void processPostDeploy(PostDeployEvent event) {
         //runtimeService.startProcessInstanceByKey("audit");
-        runtimeService.startProcessInstanceByKey("Process_myljw");
+        //runtimeService.startProcessInstanceByKey("Process_myljw");
+        //runtimeService.startProcessInstanceByKey("exGateway2");
     }
 
 }

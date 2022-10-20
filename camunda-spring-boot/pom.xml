@@ -15,6 +15,7 @@
     <description>camunda-spring-boot</description>
     <properties>
         <java.version>1.8</java.version>
+        <version.junit>4.13.1</version.junit>
     </properties>
     <dependencies>
         <dependency>
@@ -27,6 +28,13 @@
             <groupId>org.camunda.bpm.springboot</groupId>
             <artifactId>camunda-bpm-spring-boot-starter-webapp</artifactId>
             <version>7.17.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${version.junit}</version>
+            <scope>test</scope>
         </dependency>
 
         <dependency>

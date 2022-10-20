@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" id="Definitions_adc4ee9" targetNamespace="1">
+	<bpmn:process id="Process_6d099cd" name="低价审批222" isExecutable="true">
+		<bpmn:extensionElements>
+			<camunda:executionListener event="start" delegateExpression="${startProcInstListener}"/>
+			<camunda:executionListener event="end" delegateExpression="${endProcInstListener}"/>
+		</bpmn:extensionElements>
+		<bpmn:sequenceFlow id="FlowEvent_000001" targetRef="Action_904859" sourceRef="StartEvent_000001"/>
+		<bpmn:sequenceFlow id="FlowEvent_9999999" targetRef="EndEvent_9999999" sourceRef="Copy_584252"/>
+		<bpmn:sequenceFlow id="FlowEvent_995380" targetRef="Approval_016232" sourceRef="Action_904859"/>
+		<bpmn:sequenceFlow id="FlowEvent_436717" targetRef="Copy_584252" sourceRef="Approval_016232"/>
+		<bpmn:userTask id="Action_904859" name="执行人">
+			<bpmn:documentation>{"taskType":1,"userType":"4"}</bpmn:documentation>
+			<bpmn:extensionElements>
+				<camunda:formData>
+					<camunda:formField id="discountReason" label="低价原因" type="string">
+						<camunda:validation>
+							<camunda:constraint name="required"/>
+						</camunda:validation>
+					</camunda:formField>
+				</camunda:formData>
+				<camunda:taskListener event="create" delegateExpression="${startUserTaskListener}">
+					<camunda:field name="type">
+						<camunda:string><![CDATA[4]]></camunda:string>
+					</camunda:field>
+				</camunda:taskListener>
+			</bpmn:extensionElements>
+			<bpmn:incoming>FlowEvent_000001</bpmn:incoming>
+			<bpmn:outgoing>FlowEvent_785839</bpmn:outgoing>
+		</bpmn:userTask>
+		<bpmn:userTask id="Approval_016232" name="审批人">
+			<bpmn:documentation>{"taskType":2,"userType":"1","users":"392,390"}</bpmn:documentation>
+			<bpmn:extensionElements>
+				<camunda:taskListener event="create" delegateExpression="${startUserTaskListener}">
+					<camunda:field name="type">
+						<camunda:string><![CDATA[1]]></camunda:string>
+					</camunda:field>
+					<camunda:field name="users">
+						<camunda:string><![CDATA[392,390]]></camunda:string>
+					</camunda:field>
+				</camunda:taskListener>
+			</bpmn:extensionElements>
+			<bpmn:incoming>FlowEvent_785839</bpmn:incoming>
+			<bpmn:outgoing>FlowEvent_995380</bpmn:outgoing>
+		</bpmn:userTask>
+		<bpmn:serviceTask id="Copy_584252" name="抄送人" camunda:delegateExpression="${carbonCopyDelegate}">
+			<bpmn:documentation>{"taskType":3,"roles":"555","userType":"2"}</bpmn:documentation>
+			<bpmn:extensionElements>
+				<camunda:field name="type">
+					<camunda:string><![CDATA[2]]></camunda:string>
+				</camunda:field>
+				<camunda:field name="roles">
+					<camunda:string><![CDATA[555]]></camunda:string>
+				</camunda:field>
+			</bpmn:extensionElements>
+			<bpmn:incoming>FlowEvent_995380</bpmn:incoming>
+			<bpmn:outgoing>FlowEvent_9999999</bpmn:outgoing>
+		</bpmn:serviceTask>
+		<bpmn:startEvent id="StartEvent_000001" name="开始节点">
+			<bpmn:outgoing>FlowEvent_000001</bpmn:outgoing>
+		</bpmn:startEvent>
+		<bpmn:endEvent id="EndEvent_9999999" name="结束节点">
+			<bpmn:incoming>FlowEvent_9999999</bpmn:incoming>
+		</bpmn:endEvent>
+	</bpmn:process>
+</bpmn:definitions>

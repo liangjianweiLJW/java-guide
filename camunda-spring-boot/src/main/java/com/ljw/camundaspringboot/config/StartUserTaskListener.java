@@ -5,6 +5,7 @@ import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.DelegateTask;
 import org.camunda.bpm.engine.delegate.Expression;
 import org.camunda.bpm.engine.delegate.TaskListener;
+import org.camunda.bpm.model.bpmn.Bpmn;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -59,7 +60,7 @@ public class StartUserTaskListener implements TaskListener, Serializable {
 
     @Override
     public void notify(DelegateTask delegateTask) {
-        System.out.println("监听器");
+        System.out.println("监听器:    "+delegateTask.getName());
         DelegateExecution execution = delegateTask.getExecution();
     }
 

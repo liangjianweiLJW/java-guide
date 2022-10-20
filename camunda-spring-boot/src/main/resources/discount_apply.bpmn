@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0p26hnd" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.1.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
+  <bpmn:process id="DiscountApply" name="低价审批" isExecutable="true">
+    <bpmn:extensionElements>
+      <camunda:executionListener delegateExpression="${endProcInstListener}" event="end" />
+      <camunda:executionListener delegateExpression="${startProcInstListener}" event="start" />
+    </bpmn:extensionElements>
+    <bpmn:sequenceFlow id="Flow_0hpg8dd" sourceRef="StartEvent_1" targetRef="Activity_1fjgovd" />
+    <bpmn:userTask id="Activity_1fjgovd" name="低价原因填写" camunda:assignee="${start_user_id}">
+      <bpmn:extensionElements />
+      <bpmn:incoming>Flow_0hpg8dd</bpmn:incoming>
+      <bpmn:outgoing>Flow_0lbc6ui</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0lbc6ui" sourceRef="Activity_1fjgovd" targetRef="Activity_0jab5r3" />
+    <bpmn:userTask id="Activity_0jab5r3" name="主管审批" camunda:candidateGroups="${dept}">
+      <bpmn:incoming>Flow_0lbc6ui</bpmn:incoming>
+      <bpmn:outgoing>Flow_0njrj2e</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:sequenceFlow id="Flow_0njrj2e" sourceRef="Activity_0jab5r3" targetRef="Activity_0l3nxqm" />
+    <bpmn:userTask id="Activity_0l3nxqm" name="老板审批" camunda:candidateGroups="${boss}">
+      <bpmn:incoming>Flow_0njrj2e</bpmn:incoming>
+      <bpmn:outgoing>Flow_0oujrye</bpmn:outgoing>
+    </bpmn:userTask>
+    <bpmn:endEvent id="Event_17gg4rg">
+      <bpmn:incoming>Flow_0oujrye</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0oujrye" sourceRef="Activity_0l3nxqm" targetRef="Event_17gg4rg" />
+    <bpmn:startEvent id="StartEvent_1" name="低价条件判断">
+      <bpmn:outgoing>Flow_0hpg8dd</bpmn:outgoing>
+    </bpmn:startEvent>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="DiscountApply">
+      <bpmndi:BPMNEdge id="Flow_0hpg8dd_di" bpmnElement="Flow_0hpg8dd">
+        <di:waypoint x="215" y="97" />
+        <di:waypoint x="270" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0lbc6ui_di" bpmnElement="Flow_0lbc6ui">
+        <di:waypoint x="370" y="97" />
+        <di:waypoint x="430" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0njrj2e_di" bpmnElement="Flow_0njrj2e">
+        <di:waypoint x="530" y="97" />
+        <di:waypoint x="590" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0oujrye_di" bpmnElement="Flow_0oujrye">
+        <di:waypoint x="690" y="97" />
+        <di:waypoint x="752" y="97" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_1plbpy5_di" bpmnElement="Activity_1fjgovd">
+        <dc:Bounds x="270" y="57" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1fov0yr_di" bpmnElement="Activity_0jab5r3">
+        <dc:Bounds x="430" y="57" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1qdzdc1_di" bpmnElement="Activity_0l3nxqm">
+        <dc:Bounds x="590" y="57" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_17gg4rg_di" bpmnElement="Event_17gg4rg">
+        <dc:Bounds x="752" y="79" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0yqmoen_di" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="79" width="36" height="36" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="164" y="122" width="66" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

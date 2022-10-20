@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                  xmlns:di="http://www.omg.org/spec/DD/20100524/DI"
+                  xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0lo69tt"
+                  targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.2.0"
+                  modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
+    <bpmn:process id="exGateway2" isExecutable="true">
+        <bpmn:startEvent id="StartEvent_1" name="开始">
+            <bpmn:extensionElements>
+                <camunda:executionListener delegateExpression="${startProcInstListener}" event="start"/>
+            </bpmn:extensionElements>
+            <bpmn:outgoing>Flow_169jpnp</bpmn:outgoing>
+        </bpmn:startEvent>
+        <bpmn:sequenceFlow id="Flow_169jpnp" sourceRef="StartEvent_1" targetRef="Gateway_0947idl"/>
+        <bpmn:exclusiveGateway id="Gateway_0947idl" name="排他网关">
+            <bpmn:documentation>{aaa,bbb}</bpmn:documentation>
+            <bpmn:extensionElements>
+                <camunda:executionListener delegateExpression="${gatewayListener}" event="start"/>
+            </bpmn:extensionElements>
+            <bpmn:incoming>Flow_169jpnp</bpmn:incoming>
+
+            <!--    排他网关顺序与下面的顺序无关，与他们的加载顺序有关  -->
+            <!--        用户处理1-->
+            <bpmn:outgoing>Flow_19oydfc</bpmn:outgoing>
+            <!--            用户处理2-->
+            <bpmn:outgoing>Flow_1f25g17</bpmn:outgoing>
+            <!--            默认-->
+            <bpmn:outgoing>Flow_0gf4g3g</bpmn:outgoing>
+
+        </bpmn:exclusiveGateway>
+
+
+        <!--        用户处理2-->
+        <bpmn:sequenceFlow id="Flow_1f25g17" sourceRef="Gateway_0947idl" targetRef="Activity_0og1a5i">
+            <bpmn:extensionElements/>
+            <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${bbb}</bpmn:conditionExpression>
+        </bpmn:sequenceFlow>
+
+        <!--    排他网关顺序根据下面的 sequenceFlow 加载顺序有关       默认-->
+        <bpmn:sequenceFlow id="Flow_0gf4g3g" sourceRef="Gateway_0947idl" targetRef="Activity_087y0ej">
+            <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${true}</bpmn:conditionExpression>
+        </bpmn:sequenceFlow>
+
+        <!--        用户处理1-->
+        <bpmn:sequenceFlow id="Flow_19oydfc" sourceRef="Gateway_0947idl" targetRef="Activity_08wsnx8">
+            <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${aaa}</bpmn:conditionExpression>
+        </bpmn:sequenceFlow>
+
+
+
+        <bpmn:userTask id="Activity_087y0ej" name="默认">
+            <bpmn:extensionElements>
+                <camunda:taskListener delegateExpression="${startUserTaskListener}" event="create"/>
+            </bpmn:extensionElements>
+            <bpmn:incoming>Flow_0gf4g3g</bpmn:incoming>
+            <bpmn:outgoing>Flow_0q07x91</bpmn:outgoing>
+        </bpmn:userTask>
+        <!--        用户处理2-->
+        <bpmn:userTask id="Activity_0og1a5i" name="用户处理2">
+            <bpmn:extensionElements>
+                <camunda:taskListener delegateExpression="${startUserTaskListener}" event="create"/>
+            </bpmn:extensionElements>
+            <bpmn:incoming>Flow_1f25g17</bpmn:incoming>
+            <bpmn:outgoing>Flow_1ufp4wv</bpmn:outgoing>
+        </bpmn:userTask>
+
+        <!--        用户处理1-->
+        <bpmn:userTask id="Activity_08wsnx8" name="用户处理1">
+            <bpmn:extensionElements>
+                <camunda:taskListener delegateExpression="${startUserTaskListener}" event="create"/>
+            </bpmn:extensionElements>
+            <bpmn:incoming>Flow_19oydfc</bpmn:incoming>
+            <bpmn:outgoing>Flow_0owuf28</bpmn:outgoing>
+        </bpmn:userTask>
+
+
+        <bpmn:endEvent id="Event_0s21w6y" name="结束">
+            <bpmn:extensionElements>
+                <camunda:executionListener delegateExpression="${endProcInstListener}" event="end"/>
+            </bpmn:extensionElements>
+            <bpmn:incoming>Flow_1ufp4wv</bpmn:incoming>
+            <bpmn:incoming>Flow_0owuf28</bpmn:incoming>
+            <bpmn:incoming>Flow_0q07x91</bpmn:incoming>
+        </bpmn:endEvent>
+        <bpmn:sequenceFlow id="Flow_1ufp4wv" sourceRef="Activity_0og1a5i" targetRef="Event_0s21w6y"/>
+        <bpmn:sequenceFlow id="Flow_0owuf28" sourceRef="Activity_08wsnx8" targetRef="Event_0s21w6y"/>
+        <bpmn:sequenceFlow id="Flow_0q07x91" sourceRef="Activity_087y0ej" targetRef="Event_0s21w6y"/>
+
+    </bpmn:process>
+
+
+
+
+    <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+        <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1nbjda0">
+            <bpmndi:BPMNEdge id="Flow_0gf4g3g_di" bpmnElement="Flow_0gf4g3g">
+                <di:waypoint x="310" y="202"/>
+                <di:waypoint x="310" y="450"/>
+                <di:waypoint x="610" y="450"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_0owuf28_di" bpmnElement="Flow_0owuf28">
+                <di:waypoint x="710" y="80"/>
+                <di:waypoint x="811" y="80"/>
+                <di:waypoint x="811" y="177"/>
+                <di:waypoint x="892" y="177"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_1ufp4wv_di" bpmnElement="Flow_1ufp4wv">
+                <di:waypoint x="710" y="280"/>
+                <di:waypoint x="801" y="280"/>
+                <di:waypoint x="801" y="177"/>
+                <di:waypoint x="892" y="177"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_19oydfc_di" bpmnElement="Flow_19oydfc">
+                <di:waypoint x="330" y="172"/>
+                <di:waypoint x="330" y="80"/>
+                <di:waypoint x="610" y="80"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_1f25g17_di" bpmnElement="Flow_1f25g17">
+                <di:waypoint x="330" y="182"/>
+                <di:waypoint x="330" y="280"/>
+                <di:waypoint x="610" y="280"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_0q07x91_di" bpmnElement="Flow_0q07x91">
+                <di:waypoint x="710" y="450"/>
+                <di:waypoint x="801" y="450"/>
+                <di:waypoint x="801" y="177"/>
+                <di:waypoint x="892" y="177"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNEdge id="Flow_169jpnp_di" bpmnElement="Flow_169jpnp">
+                <di:waypoint x="215" y="177"/>
+                <di:waypoint x="285" y="177"/>
+            </bpmndi:BPMNEdge>
+            <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+                <dc:Bounds x="179" y="159" width="36" height="36"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="186" y="202" width="22" height="14"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Activity_05n0ipw_di" bpmnElement="Activity_087y0ej">
+                <dc:Bounds x="610" y="410" width="100" height="80"/>
+                <bpmndi:BPMNLabel/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Activity_0ijg4qs_di" bpmnElement="Activity_0og1a5i">
+                <dc:Bounds x="610" y="240" width="100" height="80"/>
+                <bpmndi:BPMNLabel/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Activity_1i0igld_di" bpmnElement="Activity_08wsnx8">
+                <dc:Bounds x="610" y="40" width="100" height="80"/>
+                <bpmndi:BPMNLabel/>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Event_0s21w6y_di" bpmnElement="Event_0s21w6y">
+                <dc:Bounds x="892" y="159" width="36" height="36"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="899" y="202" width="22" height="14"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+            <bpmndi:BPMNShape id="Gateway_0z8upy8_di" bpmnElement="Gateway_0947idl" isMarkerVisible="true">
+                <dc:Bounds x="285" y="152" width="50" height="50"/>
+                <bpmndi:BPMNLabel>
+                    <dc:Bounds x="288" y="122" width="44" height="14"/>
+                </bpmndi:BPMNLabel>
+            </bpmndi:BPMNShape>
+        </bpmndi:BPMNPlane>
+    </bpmndi:BPMNDiagram>
+</bpmn:definitions>
