@@ -1,6 +1,7 @@
 package com.ljw.camundaspringboot.create;
 
 import org.camunda.bpm.engine.RepositoryService;
+import org.camunda.bpm.engine.form.FormField;
 import org.camunda.bpm.engine.repository.Deployment;
 import org.camunda.bpm.engine.task.TaskQuery;
 import org.camunda.bpm.engine.test.ProcessEngineRule;
@@ -15,6 +16,8 @@ import org.camunda.bpm.model.bpmn.instance.*;
 import org.camunda.bpm.model.bpmn.instance.Process;
 import org.camunda.bpm.model.bpmn.instance.camunda.CamundaConstraint;
 import org.camunda.bpm.model.bpmn.instance.camunda.CamundaFormData;
+import org.camunda.bpm.model.bpmn.instance.camunda.CamundaFormField;
+import org.camunda.bpm.model.bpmn.instance.camunda.CamundaValidation;
 import org.camunda.bpm.model.xml.impl.ModelInstanceImpl;
 import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
 import org.camunda.bpm.model.xml.impl.type.ModelElementTypeImpl;
@@ -121,17 +124,27 @@ public class CreatePbmn implements ApplicationRunner {
 
     public void testCreateInvoiceProcess2(String processId) throws Exception {
         //创建进程
+        BpmnModelInstance modelInstance = Bpmn.createEmptyModel();
+        CamundaFormData formData = modelInstance.newInstance(CamundaFormData.class);
+        CamundaFormField formField= modelInstance.newInstance(CamundaFormField.class);
+        formField.setCamundaId("111");
+        formField.setCamundaLabel("2222");
+        formField.setCamundaType("string");
+        CamundaValidation formField= modelInstance.newInstance(CamundaValidation.class);
+        formField.setCamundaValidation(formField);
+        formData.addChildElement(formField);
         //	<bpmn:process id="Process_6d099cd" name="低价审批222" isExecutable="true">
         ProcessBuilder processBuilder = Bpmn.createExecutableProcess(processId).name("低价审批").executable();
         StartEventBuilder startEventBuilder = processBuilder.startEvent().name("开始节点").id("StartEvent_000001");
 
         UserTaskBuilder name = startEventBuilder.userTask().id("Action_904859").name("执行人");
         name.documentation("{\"taskType\":1,\"userType\":\"4\"}");
-        name.addExtensionElement()
-                .camundaTaskListenerDelegateExpression("create", "${startUserTaskListener}")
+        name.addExtensionElement(formData)
                 .camundaFormField().camundaId("discountReason").camundaType("String").camundaLabel("低价原因")
+                .camundaTaskListenerDelegateExpression("create", "${startUserTaskListener}")
                 .done();
-        CamundaFormData formData = done.newInstance(CamundaFormData.class);
+
+
 
 
 
