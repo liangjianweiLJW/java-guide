@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0cwb6xz" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.2.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.17.0">
-  <bpmn:process id="Process_1926mdj" name="测试ljw" isExecutable="true">
+  <bpmn:process id="diagram_1222" name="测试ljw" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:extensionElements>
-        <camunda:executionListener delegateExpression="${endProcInstListener}" event="start" />
+        <camunda:executionListener delegateExpression="${startProcInstListener}" event="start" />
       </bpmn:extensionElements>
       <bpmn:outgoing>Flow_0s0y5e1</bpmn:outgoing>
       <bpmn:outgoing>Flow_0sw5xaf</bpmn:outgoing>
@@ -31,12 +31,16 @@
     <bpmn:sequenceFlow id="Flow_0wso1iz" sourceRef="StartEvent_1" targetRef="Activity_0u1oax0">
       <bpmn:documentation>2222</bpmn:documentation>
       <bpmn:extensionElements>
-        <camunda:executionListener delegateExpression="${lineListener}" event="take" />
+        <camunda:executionListener delegateExpression="${lineListener}" event="take">
+          <camunda:field name="my2">
+            <camunda:string>22222</camunda:string>
+          </camunda:field>
+        </camunda:executionListener>
       </bpmn:extensionElements>
     </bpmn:sequenceFlow>
     <bpmn:endEvent id="Event_10x4rwq">
       <bpmn:extensionElements>
-        <camunda:executionListener delegateExpression="${startProcInstListener}" event="end" />
+        <camunda:executionListener delegateExpression="${endProcInstListener}" event="end" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1xd12o6</bpmn:incoming>
       <bpmn:incoming>Flow_0ocuaj2</bpmn:incoming>
@@ -71,7 +75,7 @@
     </bpmn:userTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_1926mdj">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_myljw">
       <bpmndi:BPMNEdge id="Flow_0c50evo_di" bpmnElement="Flow_0c50evo">
         <di:waypoint x="440" y="360" />
         <di:waypoint x="516" y="360" />
