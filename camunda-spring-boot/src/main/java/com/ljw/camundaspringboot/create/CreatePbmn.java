@@ -1,34 +1,21 @@
 package com.ljw.camundaspringboot.create;
 
 import org.camunda.bpm.engine.RepositoryService;
-import org.camunda.bpm.engine.form.FormField;
+import org.camunda.bpm.engine.RuntimeService;
 import org.camunda.bpm.engine.repository.Deployment;
-import org.camunda.bpm.engine.task.TaskQuery;
-import org.camunda.bpm.engine.test.ProcessEngineRule;
 import org.camunda.bpm.model.bpmn.Bpmn;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.GatewayDirection;
-import org.camunda.bpm.model.bpmn.builder.*;
-import org.camunda.bpm.model.bpmn.builder.ProcessBuilder;
-import org.camunda.bpm.model.bpmn.impl.instance.camunda.CamundaFormDataImpl;
-import org.camunda.bpm.model.bpmn.impl.instance.camunda.CamundaValidationImpl;
-import org.camunda.bpm.model.bpmn.instance.*;
+import org.camunda.bpm.model.bpmn.impl.instance.Outgoing;
 import org.camunda.bpm.model.bpmn.instance.Process;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaConstraint;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaFormData;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaFormField;
-import org.camunda.bpm.model.bpmn.instance.camunda.CamundaValidation;
-import org.camunda.bpm.model.xml.impl.ModelInstanceImpl;
-import org.camunda.bpm.model.xml.impl.instance.ModelTypeInstanceContext;
-import org.camunda.bpm.model.xml.impl.type.ModelElementTypeImpl;
+import org.camunda.bpm.model.bpmn.instance.*;
+import org.camunda.bpm.model.bpmn.instance.camunda.*;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @Description: todo
@@ -41,6 +28,10 @@ public class CreatePbmn implements ApplicationRunner {
     @Resource
     RepositoryService repositoryService;
 
+
+    @Resource
+    private RuntimeService runtimeService;
+
     //public ProcessEngineRule processEngine = new ProcessEngineRule();
 
     @Override
@@ -52,7 +43,7 @@ public class CreatePbmn implements ApplicationRunner {
         //definitions.setAttributeValue("bpmn","http://www.omg.org/spec/BPMN/20100524/MODEL");
         definitions.setTargetNamespace("1");
         definitions.setId("id124343543");
-        definitions.setAttributeValueNs("http://camunda.org/schema/1.0/bpmn","bpmn","http://camunda.org/schema/1.0/bpmn",false);
+        definitions.setAttributeValueNs("http://camunda.org/schema/1.0/bpmn", "bpmn", "http://camunda.org/schema/1.0/bpmn", false);
         modelInstance.setDefinitions(definitions);
 
 // create the process
@@ -93,10 +84,10 @@ public class CreatePbmn implements ApplicationRunner {
                 .done();
         System.out.println(Bpmn.convertToString(myProcess));
 
-       Deployment deployment = repositoryService.createDeployment()
+        Deployment deployment = repositoryService.createDeployment()
                 .tenantId("222")
                 .name("ljwceces")
-                .addModelInstance("ljejjeg.bpmn",modelInstance)
+                .addModelInstance("ljejjeg.bpmn", modelInstance)
                 .deploy();
         System.out.println(deployment.getId());
 
@@ -124,33 +115,91 @@ public class CreatePbmn implements ApplicationRunner {
 
     public void testCreateInvoiceProcess2(String processId) throws Exception {
         //创建进程
-        BpmnModelInstance modelInstance = Bpmn.createEmptyModel();
-        CamundaFormData formData = modelInstance.newInstance(CamundaFormData.class);
-        CamundaFormField formField= modelInstance.newInstance(CamundaFormField.class);
-        formField.setCamundaId("111");
-        formField.setCamundaLabel("2222");
-        formField.setCamundaType("string");
-        CamundaValidation formField= modelInstance.newInstance(CamundaValidation.class);
-        formField.setCamundaValidation(formField);
-        formData.addChildElement(formField);
         //	<bpmn:process id="Process_6d099cd" name="低价审批222" isExecutable="true">
-        ProcessBuilder processBuilder = Bpmn.createExecutableProcess(processId).name("低价审批").executable();
-        StartEventBuilder startEventBuilder = processBuilder.startEvent().name("开始节点").id("StartEvent_000001");
-
-        UserTaskBuilder name = startEventBuilder.userTask().id("Action_904859").name("执行人");
-        name.documentation("{\"taskType\":1,\"userType\":\"4\"}");
-        name.addExtensionElement(formData)
-                .camundaFormField().camundaId("discountReason").camundaType("String").camundaLabel("低价原因")
-                .camundaTaskListenerDelegateExpression("create", "${startUserTaskListener}")
-                .done();
+        //ProcessBuilder processBuilder = Bpmn.createExecutableProcess(processId).name("低价审批").executable();
 
 
+        BpmnModelInstance modelInstance = Bpmn.createEmptyModel();
+        Definitions definitions = modelInstance.newInstance(Definitions.class);
+        definitions.setTargetNamespace("1");
+        definitions.setId("id124343543");
+
+        Process process = definitions.getModelInstance().newInstance(Process.class);
+        //process.setAttributeValue("id", "myProcess_", true);
+        //process.setAttributeValue("name", "低价审批", true);
+        process.setId("myProcess_");
+        process.setName("低价审批");
+        process.isExecutable();
+        process.setAttributeValue("isExecutable", "true", true);
+
+        StartEvent startEvent = process.getModelInstance().newInstance(StartEvent.class);
+        startEvent.setId("Event_03z5fdx");
+        startEvent.setName("开始节点");
+        process.addChildElement(startEvent);
+        //Outgoing outgoing = process.getModelInstance().newInstance(Outgoing.class);
+        //outgoing.setTextContent("Flow_1unnocy");
+        //startEvent.addChildElement(outgoing);
+
+        definitions.addChildElement(process);
+        modelInstance.setDefinitions(definitions);
+        UserTask userTask = process.getModelInstance().newInstance(UserTask.class);
+        process.addChildElement(userTask);
+        Documentation documentation = userTask.getModelInstance().newInstance(Documentation.class);
+        documentation.setTextContent("{\"taskType\":1,\"userType\":\"4\"}");
+        userTask.addChildElement(documentation);
+        CamundaFormData camundaFormData = process.getModelInstance().newInstance(CamundaFormData.class);
+        ExtensionElements extensionElements = process.getModelInstance().newInstance(ExtensionElements.class);
+        extensionElements.addChildElement(camundaFormData);
+
+        CamundaFormField camundaFormField = extensionElements.getModelInstance().newInstance(CamundaFormField.class);
+        camundaFormField.setCamundaId("discountReason");
+        camundaFormField.setCamundaLabel("低价原因");
+        camundaFormField.setCamundaType("string");
+        CamundaValidation camundaValidation = camundaFormField.getModelInstance().newInstance(CamundaValidation.class);
+        CamundaConstraint camundaConstraint = camundaValidation.getModelInstance().newInstance(CamundaConstraint.class);
+        camundaConstraint.setCamundaName("required");
+        camundaValidation.addChildElement(camundaConstraint);
+        camundaFormField.addChildElement(camundaValidation);
+        camundaFormData.addChildElement(camundaFormField);
 
 
+        CamundaTaskListener camundaTaskListener = extensionElements.getModelInstance().newInstance(CamundaTaskListener.class);
+        camundaTaskListener.setCamundaDelegateExpression("${startUserTaskListener}");
+        camundaTaskListener.setCamundaEvent("create");
+        CamundaField formData = camundaTaskListener.getModelInstance().newInstance(CamundaField.class);
+        formData.setCamundaName("type");
+        CamundaString camundaString = formData.getModelInstance().newInstance(CamundaString.class);
+        camundaString.setTextContent("<![CDATA[2]]>");
+        formData.addChildElement(camundaString);
+        camundaTaskListener.addChildElement(formData);
+        extensionElements.addChildElement(camundaTaskListener);
 
+        userTask.addChildElement(extensionElements);
+        userTask.setName("执行人");
 
-        String xmlString = Bpmn.convertToString(done);
+        //SequenceFlow sequenceFlow = process.getModelInstance().newInstance(SequenceFlow.class);
+        createSequenceFlow(process,startEvent,userTask);
+
+        // convert to string
+        String xmlString = Bpmn.convertToString(modelInstance);
         System.out.println(xmlString);
+
+        Deployment deployment = repositoryService.createDeployment()
+                .tenantId("333")
+                .name("ljwceces333")
+                .addModelInstance("ljejjeg333.bpmn", modelInstance)
+                .deploy();
+        System.out.println(deployment.getId());
+        runtimeService.startProcessInstanceByKey("myProcess_");
+        //StartEventBuilder startEventBuilder = processBuilder.startEvent().name("开始节点").id("StartEvent_000001");
+        //UserTaskBuilder userTaskBuilder = startEventBuilder.userTask().id("Action_904859").name("执行人");
+        //UserTaskBuilder documentation = userTaskBuilder.documentation("{\"taskType\":1,\"userType\":\"4\"}");
+        //CamundaUserTaskFormFieldBuilder camundaUserTaskFormFieldBuilder = userTaskBuilder.camundaFormField().camundaId("discountReason").camundaType("String").camundaLabel("低价原因");
+        //userTaskBuilder.camundaTaskListenerDelegateExpression("create", "${startUserTaskListener}")
+        //        .addExtensionElement(formData);
+
+        //String xmlString = Bpmn.convertToString(done);
+        //System.out.println(xmlString);
 
 
     }
@@ -158,39 +207,49 @@ public class CreatePbmn implements ApplicationRunner {
     public void testCreateInvoiceProcess() throws Exception {
         //AbstractFlowNodeBuilder abstractFlowNodeBuilder
         BpmnModelInstance modelInstance = Bpmn.createExecutableProcess("invoice")
-                .name("BPMN API Invoice Process")
+                .name("我的流程定义名称")
+                //
                 .startEvent()
-                .name("Invoice received")
+                .name("开始节点")
+
                 .userTask()
-                .name("Assign Approver")
+                .name("发起")
                 .camundaAssignee("demo")
+
                 .userTask()
                 .id("approveInvoice")
-                .name("Approve Invoice")
+                .name("审批")
+
                 .exclusiveGateway()
-                .name("Invoice approved?")
+                .name("排他网关名")
                 .gatewayDirection(GatewayDirection.Diverging)
                 .condition("yes", "${approved}")
+
                 .userTask()
-                .name("Prepare Bank Transfer")
+                .name("yes 接收")
                 .camundaFormKey("embedded:app:forms/prepare-bank-transfer.html")
                 .camundaCandidateGroups("accounting")
+
                 .serviceTask()
                 .name("Archive Invoice")
                 .camundaClass("org.camunda.bpm.example.invoice.service.ArchiveInvoiceService")
                 .endEvent()
                 .name("Invoice processed")
+
                 .moveToLastGateway()
                 .condition("no", "${!approved}")
                 .userTask()
-                .name("Review Invoice")
+                .name("no 接收")
                 .camundaAssignee("demo")
+
                 .exclusiveGateway()
                 .name("Review successful?")
+
                 .gatewayDirection(GatewayDirection.Diverging)
                 .condition("no", "${!clarified}")
                 .endEvent()
                 .name("Invoice not processed")
+
                 .moveToLastGateway()
                 .condition("yes", "${clarified}")
                 .connectTo("approveInvoice")
@@ -201,7 +260,7 @@ public class CreatePbmn implements ApplicationRunner {
         Deployment deployment = repositoryService.createDeployment()
                 .tenantId("222")
                 .name("我的api流程")
-                .addModelInstance("apimy.bpmn",modelInstance)
+                .addModelInstance("apimy.bpmn", modelInstance)
                 .deploy();
         System.out.println(deployment.getId());
 /*
