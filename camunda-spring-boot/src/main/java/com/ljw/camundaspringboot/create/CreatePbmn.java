@@ -67,7 +67,7 @@ public class CreatePbmn implements ApplicationRunner {
         createSequenceFlow(process, task2, join);
         createSequenceFlow(process, join, endEvent);
 
-// validate and write model to file
+       // validate and write model to file
         Bpmn.validateModel(modelInstance);
         File file = File.createTempFile("bpmn-model-api-", ".bpmn");
         Bpmn.writeModelToFile(file, modelInstance);
@@ -113,6 +113,8 @@ public class CreatePbmn implements ApplicationRunner {
         return element;
     }
 
+
+
     public void testCreateInvoiceProcess2(String processId) throws Exception {
         //创建进程
         //	<bpmn:process id="Process_6d099cd" name="低价审批222" isExecutable="true">
@@ -142,6 +144,8 @@ public class CreatePbmn implements ApplicationRunner {
 
         definitions.addChildElement(process);
         modelInstance.setDefinitions(definitions);
+
+
         UserTask userTask = process.getModelInstance().newInstance(UserTask.class);
         process.addChildElement(userTask);
         Documentation documentation = userTask.getModelInstance().newInstance(Documentation.class);
