@@ -40,7 +40,7 @@ public class AopOrderController {
 
 
     /**
-     *  
+     *
      *
      * @param param
      * @return
@@ -60,7 +60,11 @@ public class AopOrderController {
         this.convert(param, startEvent, null, sequenceFlow, userTask, groupEndNodeMap, sonFatherIdMap, instantMap);
         System.out.println(sequenceFlow);
         System.out.println(userTask);
-        return null;
+
+        Map<String, String> result = new HashMap<>();
+        result.put("sequenceFlow", sequenceFlow.toString());
+        result.put("userTask", userTask.toString());
+        return result.toString();
     }
 
     private void convert(Map<String, Object> param, Map<String, String> sourceNode, String parentGroupId, ArrayList<Map<String, String>> sequenceFlow, ArrayList<Map<String, String>> userTask, Map<String, Object> groupEndNodeMap, Map<String, String> sonFatherIdMap, Map<String, Object> instantMap) {
