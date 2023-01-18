@@ -38,6 +38,7 @@
         <module>validation-annotation-spring-boot</module>
         <module>itext-pdf-spring-boot</module>
         <module>camunda-spring-boot</module>
+        <module>test-spring-boot</module>
     </modules>
 
     <repositories>
